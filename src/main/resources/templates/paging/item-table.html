@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div
+        th:fragment="tableContent"
+>
+    <table>
+        <thead>
+        <tr>
+            <th
+                    th:with="sort=${page.sort}, pageNumber=${page.number}, pageSize=${page.size}"
+            >
+                <div
+                        th:if="${sort.getOrderFor('name') != null &&
+            sort.getOrderFor('name').direction.toString() == 'DESC'}"
+                        hx:get="@{/paging?sort=name,asc&size={pageSize}&page={pageNumber}(pageSize=${page.size},pageNumber=${page.number})}"
+                        hx-target="#table-wrapper"
+                        hx-push-url="true">
+                    <p>Name (V)</p>
+                </div>
+                <div
+                        th:if="${sort.getOrderFor('name') != null &&
+            sort.getOrderFor('name').direction.toString() == 'ASC'}"
+                        hx:get="@{/paging?sort=name,desc&size={pageSize}&page={pageNumber}(pageSize=${page.size},pageNumber=${page.number})}"
+                        hx-target="#table-wrapper"
+                        hx-push-url="true">
+                    <p>Name (^)</p>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:if="${#lists.size(page.content) > 0}">
+            <tr th:each="item : ${page.content}">
+                <td th:text="${item.name}"></td>
+            </tr>
+        </div>
+        </tbody>
+
+        <nav
+                th:fragment="pageNumberSetter(page, getFrom, target, pushUrl)"
+                aria-label="Pagination"
+        >
+            <div th:if="${page.hasPrevious()}">
+                <a hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${page.number - 1})}"
+                   hx-target="#table-wrapper"
+                   hx-push-url="true">
+                    PREV
+                </a>
+            </div>
+            <div th:unless="${page.hasPrevious()}">
+                <a>PREV</a>
+            </div>
+
+            <a
+                    th:if="${page.number + 1 - pager.buttonsToShow >= 1}"
+                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${page.number - pager.buttonsToShow})}"
+                    hx-target=#table-wrapper
+                    hx-push-url="true"
+            >
+                ...
+            </a>
+            <a
+                    th:each="pagenum : ${#numbers.sequence(pager.startPage, pager.endPage)}"
+                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${pagenum - 1})}"
+                    hx-target="#table-wrapper"
+                    hx-push-url="true"
+                    th:text="${pagenum}"
+            >
+                1
+            </a>
+            <a
+                    th:if="${(page.number + 1) + pager.buttonsToShow <= page.getTotalPages()}"
+                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${page.number + pager.buttonsToShow})}"
+                    hx-target="#table-wrapper"
+                    hx-push-url="true">
+                ...
+            </a>
+
+
+            <div th:if="${page.hasNext()}">
+                <a hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${page.number + 1})}"
+                   hx-target="#table-wrapper"
+                   hx-push-url="true">
+                    NEXT
+                </a>
+            </div>
+            <div th:unless="${page.hasNext()}">
+                <a>NEXT</a>
+            </div>
+
+        </nav>
+    </table>
+
+</div>
+</html>
