@@ -7,11 +7,7 @@
         <div>
             <label for="name">Name</label>
             <input th:id="name" th:field="*{name}" type="text"
-                   hx-trigger="keyup changed delay:200ms"
-                   hx-post="/forms"
-                   hx-include="closest form"
-                   hx-target="#hx-form"
-                   hx-swap="morph"
+
             >
             <p th:if="${#fields.hasErrors('name')}" th:errorclass="error" th:errors="*{name}"/>
         </div>
@@ -19,11 +15,7 @@
         <div>
             <label for="field">Field</label>
             <input th:id="field" th:field="*{field}" type="text"
-                   hx-trigger="keyup changed delay:200ms"
-                   hx-post="/forms"
-                   hx-include="closest form"
-                   hx-target="#hx-form"
-                   hx-swap="morph"
+
             >
             <p th:if="${#fields.hasErrors('field')}" th:errorclass="error" th:errors="*{field}"/>
         </div>
@@ -31,4 +23,10 @@
         <button type="submit">Submit</button>
     </form>
 </div>
-</html>>
+</html>
+
+<!--      hx-trigger="keyup changed delay:200ms"
+                   hx-post="/forms"
+                   hx-include="closest form"
+                   hx-target="#hx-form"
+                   hx-swap="morph"-->

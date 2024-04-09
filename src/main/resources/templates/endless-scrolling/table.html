@@ -6,7 +6,7 @@
 >
     <th:block>
         <th:block th:each="item, iStat : ${items}">
-            <th:block th:if="${!iStat.last}">
+            <th:block th:if="sse-connect="/server-send-events/sse-emitter"${!iStat.last}">
 
                 <li th:text="${item.name}">
 
@@ -15,9 +15,7 @@
 
             <th:block th:if="${iStat.last}">
                 <li
-                        hx:get="@{/endless-scrolling?sort={sort}&page={page}&size={size}(page=${slice.getNumber + 1},size=5,sort='name,desc')}"
-                        hx-trigger="intersect once"
-                        hx-swap="afterend"
+
                         th:text="${item.name}"
                 ></li>
             </th:block>
@@ -27,3 +25,7 @@
 </div>
 
 </html>
+
+<!--    hx:get="@{/endless-scrolling?sort={sort}&page={page}&size={size}(page=${slice.getNumber + 1},size=5,sort='name,desc')}"
+                        hx-trigger="intersect once"
+                        hx-swap="afterend"-->
