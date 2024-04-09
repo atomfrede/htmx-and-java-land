@@ -40,7 +40,7 @@ public class ServerSendEventsController {
         return sseEmitter;
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 2000)
     void shedule() throws BigBoneRequestException {
         final Pageable<Status> statuses = client.timelines()
                 .getTagTimeline("javaland", LOCAL_AND_REMOTE).execute();

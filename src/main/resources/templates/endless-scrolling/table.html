@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div
+        th:fragment="list"
+>
+    <th:block>
+        <th:block th:each="item, iStat : ${items}">
+            <th:block th:if="${!iStat.last}">
+
+                <li th:text="${item.name}">
+
+                </li>
+            </th:block>
+
+            <th:block th:if="${iStat.last}">
+                <li
+                        hx:get="@{/endless-scrolling?sort={sort}&page={page}&size={size}(page=${slice.getNumber + 1},size=5,sort='name,desc')}"
+                        hx-trigger="intersect once"
+                        hx-swap="afterend"
+                        th:text="${item.name}"
+                ></li>
+            </th:block>
+        </th:block>
+    </th:block>
+
+</div>
+
+</html>

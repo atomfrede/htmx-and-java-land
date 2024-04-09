@@ -1,0 +1,22 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<body>
+
+<h1>Endless scrolling</h1>
+
+<div id="table-wrapper">
+    <div th:replace="endless-scrolling/table :: list"></div>
+</div>
+
+<footer>
+    <ul>
+        <li><a href="https://github.com/atomfrede/htmx-and-java-land" target="_blank">Quellcode</a></li>
+        <li><a href="https://mastodon.social/@atomfrede">@atomfrede@mastodon.social</a></li>
+    </ul>
+</footer>
+
+<script type="text/javascript" th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
+
+</body>
