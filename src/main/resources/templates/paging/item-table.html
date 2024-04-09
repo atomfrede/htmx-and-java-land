@@ -4,47 +4,50 @@
 <div
         th:fragment="tableContent"
 >
-    <table>
-        <thead>
-        <tr>
-            <th
-                    th:with="sort=${page.sort}, pageNumber=${page.number}, pageSize=${page.size}"
-            >
-                <div
-                        th:if="${sort.getOrderFor('name') != null &&
-            sort.getOrderFor('name').direction.toString() == 'DESC'}"
-                        hx:get="@{/paging?sort=name,asc&size={pageSize}&page={pageNumber}(pageSize=${page.size},pageNumber=${page.number})}"
-                        hx-target="#table-wrapper"
-                        hx-push-url="true">
-                    <p>Name (V)</p>
-                </div>
-                <div
-                        th:if="${sort.getOrderFor('name') != null &&
-            sort.getOrderFor('name').direction.toString() == 'ASC'}"
-                        hx:get="@{/paging?sort=name,desc&size={pageSize}&page={pageNumber}(pageSize=${page.size},pageNumber=${page.number})}"
-                        hx-target="#table-wrapper"
-                        hx-push-url="true">
-                    <p>Name (^)</p>
-                </div>
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <div th:if="${#lists.size(page.content) > 0}">
-            <tr th:each="item : ${page.content}">
-                <td th:text="${item.name}"></td>
+    <div>
+        <table hx-target="#table-wrapper" hx-push-url="true">
+            <thead>
+            <tr>
+                <th
+                        th:with="_sort=${page.sort}"
+                >
+                    <div
+                            th:if="${_sort.getOrderFor('name') != null &&
+            _sort.getOrderFor('name').direction.toString() == 'DESC'}"
+                            hx:get="@{/paging?sort=name,asc&size={pageSize}&page={pageNumber}(pageSize=${page.size},pageNumber=${page.number})}"
+                    >
+                        <p>Name (V)</p>
+                    </div>
+                    <div
+                            th:if="${_sort.getOrderFor('name') != null &&
+            _sort.getOrderFor('name').direction.toString() == 'ASC'}"
+                            hx:get="@{/paging?sort=name,desc&size={pageSize}&page={pageNumber}(pageSize=${page.size},pageNumber=${page.number})}"
+                    >
+                        <p>Name (^)</p>
+                    </div>
+                </th>
             </tr>
-        </div>
-        </tbody>
+            </thead>
+            <tbody>
+            <div th:if="${#lists.size(page.content) > 0}">
+                <tr th:each="item : ${page.content}">
+                    <td th:text="${item.name}"></td>
+                </tr>
+            </div>
+            </tbody>
+
+
+        </table>
 
         <nav
-                th:fragment="pageNumberSetter(page, getFrom, target, pushUrl)"
+                hx-target="#table-wrapper" hx-push-url="true"
                 aria-label="Pagination"
         >
             <div th:if="${page.hasPrevious()}">
                 <a hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${page.number - 1})}"
-                   hx-target="#table-wrapper"
-                   hx-push-url="true">
+                   hx-push-url="true"
+                   class="active-prev"
+                >
                     PREV
                 </a>
             </div>
@@ -54,34 +57,29 @@
 
             <a
                     th:if="${page.number + 1 - pager.buttonsToShow >= 1}"
-                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${page.number - pager.buttonsToShow})}"
-                    hx-target=#table-wrapper
-                    hx-push-url="true"
+                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={newPageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, newPageNumber=${page.number - pager.buttonsToShow})}"
             >
                 ...
             </a>
             <a
                     th:each="pagenum : ${#numbers.sequence(pager.startPage, pager.endPage)}"
-                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${pagenum - 1})}"
-                    hx-target="#table-wrapper"
-                    hx-push-url="true"
+                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={newPageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, newPageNumber=${page.number - 1})}"
                     th:text="${pagenum}"
             >
                 1
             </a>
             <a
                     th:if="${(page.number + 1) + pager.buttonsToShow <= page.getTotalPages()}"
-                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${page.number + pager.buttonsToShow})}"
-                    hx-target="#table-wrapper"
-                    hx-push-url="true">
+                    hx:get="@{/paging?sort={sort}&size={pageSize}&page={newPageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, newPageNumber=${page.number + pager.buttonsToShow})}"
+            >
                 ...
             </a>
 
 
             <div th:if="${page.hasNext()}">
-                <a hx:get="@{/paging?sort={sort}&size={pageSize}&page={pageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, pageNumber=${page.number + 1})}"
-                   hx-target="#table-wrapper"
-                   hx-push-url="true">
+                <a hx:get="@{/paging?sort={sort}&size={pageSize}&page={newPageNumber}(sort=${#strings.replace(page.sort,': ',',')}, pageSize=${page.size}, newPageNumber=${page.number + 1})}"
+                   class="active-next"
+                >
                     NEXT
                 </a>
             </div>
@@ -90,7 +88,7 @@
             </div>
 
         </nav>
-    </table>
+    </div>
 
 </div>
 </html>
